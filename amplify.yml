@@ -1,0 +1,28 @@
+# AWS Amplify Hosting build specification (Next.js SSR).
+# Runtime configuration comes from the Amplify app's environment variables
+# (set by the CDK stack). None of them are secrets: AWS access is granted to
+# the server through the IAM compute role, never through keys.
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - nvm install 22 && nvm use 22
+        - npm ci
+        # Quality gate: a build that fails type-checking, lint or unit tests is never deployed.
+        - npm run typecheck
+        - npm run lint
+        - npm run test:unit
+    build:
+      commands:
+        # Amplify only exposes env vars to the SSR runtime if they are written to .env.production.
+        - env | grep -E '^(APP_ENV|SITE_URL|DYNAMODB_TABLE|STORAGE_DRIVER|S3_BUCKET|MEDIA_BASE_URL|NEXT_PUBLIC_MEDIA_BASE_URL|TRUST_PROXY|PROXY_HOPS|SES_FROM_ADDRESS|ORDER_NOTIFY_EMAIL)=' >> .env.production
+        - npm run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - "**/*"
+  cache:
+    paths:
+      - node_modules/**/*
+      - .next/cache/**/*

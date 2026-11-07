@@ -1,0 +1,7 @@
+{
+  "app": "npx tsx bin/basman.ts",
+  "context": {
+    "@aws-cdk/aws-iam:minimizePolicies": true,
+    "@aws-cdk/core:checkSecretUsage": true
+  }
+}
