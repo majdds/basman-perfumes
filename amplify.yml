@@ -16,7 +16,7 @@ frontend:
     build:
       commands:
         # Amplify only exposes env vars to the SSR runtime if they are written to .env.production.
-        - env | grep -E '^(APP_ENV|SITE_URL|DYNAMODB_TABLE|STORAGE_DRIVER|S3_BUCKET|MEDIA_BASE_URL|NEXT_PUBLIC_MEDIA_BASE_URL|TRUST_PROXY|PROXY_HOPS|SES_FROM_ADDRESS|ORDER_NOTIFY_EMAIL)=' >> .env.production
+        - env | grep -E '^(APP_ENV|SITE_URL|DYNAMODB_TABLE|STORAGE_DRIVER|S3_BUCKET|MEDIA_BASE_URL|NEXT_PUBLIC_MEDIA_BASE_URL|TRUST_PROXY|PROXY_HOPS|SES_FROM_ADDRESS|ORDER_NOTIFY_EMAIL)=' >> .env.production || true
         - npm run build
   artifacts:
     baseDirectory: .next
